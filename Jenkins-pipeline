@@ -1,25 +1,24 @@
-pipeline {
-    // add your slave label name
-    agent { label 'my_slave1'}
-    tools{
-        maven 'maven3.8.6'
+pipeline{
+    agent any
+    parameters{
+     string(name: 'TARGET_BRANCH', defaultValue: "Master", description: 'Enter default value')
+	 choice(name: 'Environment', choices: ['Dev', 'UAT', 'PROD'], description: 'Please select the Environment')
+	
     }
-    stages {
-        stage ('Checkout SCM') {
+        stages
+        {
+            stage("Parameters")
+            {
+                
+                steps{
 
-            steps {
-			    git branch: 'main', url: 'https://github.com/sushmitha2506/skydevops-maven-repo.git'
+                    sh label: '', script: 'echo "This is parameter stage "'
+                    echo "${params.TARGET_BRANCH}"
+					echo "${params.Environment}"
+					
+                
+                
+				}
+				}
             }
-        }
-
-        stage ('Build') {
-
-            steps {
-               sh 'mvn clean package'
-            }
-        }
-        
-       
-        
-    }
-}
+  
